@@ -2,6 +2,69 @@ package com.example.pertemuan12localrestapi.view
 
 
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun HomeScreen(
+    navigateToItemEntry: () -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: HomeViewModel = viewModel(factory = PenyediaViewModel.Factory)
+) {
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    Scaffold(
+        modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        topBar = {
+            SiswaTopAppBar(
+                title = stringResource(DestinasiHome.titleRes),
+                canNavigateBack = false,
+                scrollBehavior = scrollBehavior
+            )
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = navigateToItemEntry,
+                shape = MaterialTheme.shapes.medium,
+                modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_large))
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = stringResource(R.string.entry_siswa)
+                )
+            }
+        },
+    ) { innerPadding ->
+        HomeStatus(
+            statusUiSiswa = viewModel.listSiswa,
+            retryAction = { viewModel.loadSiswa() },
+            modifier = modifier
+                .padding(innerPadding)
+                .fillMaxSize()
+        )
+    }
+}
+
+@Composable
+fun HomeStatus(
+    statusUiSiswa: StatusUiSiswa,
+    retryAction: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    when (statusUiSiswa) {
+        is StatusUiSiswa.Loading -> OnLoading(modifier = modifier.fillMaxSize())
+        is StatusUiSiswa.Success ->
+            if (statusUiSiswa.siswa.isEmpty()) {
+                return Column(modifier = modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(text = "Tidak ada data siswa")
+                }
+            } else {
+                SiswaLayout(
+                    siswa = statusUiSiswa.siswa,
+                    modifier = modifier.fillMaxWidth()
+                )
+            }
+        is StatusUiSiswa.Error -> OnError(retryAction, modifier = modifier.fillMaxSize())
+    }
+}
+
 @Composable
 fun OnLoading(modifier: Modifier = Modifier) {
     Image(

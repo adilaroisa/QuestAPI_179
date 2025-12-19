@@ -10,5 +10,9 @@ class EntryViewModel (private val repositoryDataSiswa: RepositoryDataSiswa) : Vi
         uiStateSiswa = UIStateSiswa(detailSiswa, validasiInput(detailSiswa))
     }
 
-
+    suspend fun addSiswa() {
+        if (validasiInput()) {
+            repositoryDataSiswa.postDataSiswa(uiStateSiswa.detailSiswa.toDataSiswa())
+        }
+    }
 }

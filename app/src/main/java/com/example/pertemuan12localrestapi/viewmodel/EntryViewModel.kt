@@ -8,7 +8,7 @@ import com.example.pertemuan12localrestapi.modeldata.DetailSiswa
 import com.example.pertemuan12localrestapi.modeldata.UIStateSiswa
 import com.example.pertemuan12localrestapi.modeldata.toDataSiswa
 import com.example.pertemuan12localrestapi.repositori.RepositoryDataSiswa
-import okhttp3.Response
+import retrofit2.Response
 
 class EntryViewModel (private val repositoryDataSiswa: RepositoryDataSiswa) : ViewModel() {
     var uiStateSiswa by mutableStateOf(UIStateSiswa())

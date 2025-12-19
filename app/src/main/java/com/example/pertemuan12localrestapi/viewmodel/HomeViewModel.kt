@@ -1,6 +1,15 @@
 package com.example.pertemuan12localrestapi.viewmodel
 
-
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.pertemuan12localrestapi.modeldata.DataSiswa
+import com.example.pertemuan12localrestapi.repositori.RepositoryDataSiswa
+import kotlinx.coroutines.launch
+import retrofit2.HttpException
+import java.io.IOException
 
 sealed interface StatusUiSiswa {
     data class Success(val siswa: List<DataSiswa> = listOf()) : StatusUiSiswa

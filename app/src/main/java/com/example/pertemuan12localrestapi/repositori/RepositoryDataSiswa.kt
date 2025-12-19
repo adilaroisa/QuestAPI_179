@@ -1,5 +1,6 @@
 package com.example.pertemuan12localrestapi.repositori
 
+import com.example.pertemuan12localrestapi.apiservice.ServiceApiSiswa
 import com.example.pertemuan12localrestapi.modeldata.DataSiswa
 
 interface RepositoryDataSiswa {

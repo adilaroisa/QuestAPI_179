@@ -56,7 +56,7 @@ fun HomeScreen(
             }
         },
     ) { innerPadding ->
-        HomeStatus(
+        HomeBody(
             statusUiSiswa = viewModel.listSiswa,
             onSiswaClick = navigateToItemUpdate,
             retryAction = { viewModel.loadSiswa() },
@@ -68,7 +68,7 @@ fun HomeScreen(
 }
 
 @Composable
-fun HomeStatus(
+fun HomeBody(
     statusUiSiswa: StatusUiSiswa,
     onSiswaClick: (Int) -> Unit,
     retryAction: () -> Unit,
@@ -79,26 +79,22 @@ fun HomeStatus(
         modifier = modifier
     )
     {
-    when (statusUiSiswa) {
-        is StatusUiSiswa.Loading -> OnLoading(modifier = modifier.fillMaxSize())
-        is StatusUiSiswa.Success ->
-            if (statusUiSiswa.siswa.isEmpty()) {
-                return Column(modifier = modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(text = "Tidak ada data siswa")
-                }
-            } else {
-                SiswaLayout(
-                    siswa = statusUiSiswa.siswa,
-                    modifier = modifier.fillMaxWidth()
-                )
-            }
-        is StatusUiSiswa.Error -> OnError(retryAction, modifier = modifier.fillMaxSize())
+        when(statusUiSiswa){
+            is StatusUiSiswa.Loading -> LoadingScreen()
+            is StatusUiSiswa.Success -> DaftarSiswa(
+                itemSiswa = statusUiSiswa.siswa,
+                onSiswaClick = { onSiswaClick(it.id) }
+            )
+            is StatusUiSiswa.Error -> ErrorScreen(
+                retryAction,
+                modifier = modifier.fillMaxSize()
+            )
         }
     }
 }
 
 @Composable
-fun OnLoading(modifier: Modifier = Modifier) {
+fun LoadingScreen(modifier: Modifier = Modifier) {
     Image(
         modifier = modifier.size(200.dp),
         painter = painterResource(R.drawable.loading_img),
@@ -107,7 +103,7 @@ fun OnLoading(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun OnError(retryAction: () -> Unit, modifier: Modifier = Modifier) {
+fun ErrorScreen(retryAction: () -> Unit, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.Center,
@@ -121,29 +117,27 @@ fun OnError(retryAction: () -> Unit, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun SiswaLayout(
-    siswa: List<DataSiswa>,
-    modifier: Modifier = Modifier,
-    onSiswaClick: (DataSiswa) -> Unit = {}
+fun DaftarSiswa(
+    itemSiswa: List<DataSiswa>,
+    onSiswaClick: (DataSiswa) -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    LazyColumn(
-        modifier = modifier,
-        contentPadding = PaddingValues(dimensionResource(id = R.dimen.padding_small)),
-        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_small))
-    ) {
-        items(items = siswa, key = { it.id }) { siswa ->
-            SiswaCard(
-                siswa = siswa,
+    LazyColumn(modifier = modifier) {
+        items(items = itemSiswa, key = { it.id }){
+                person ->
+            ItemSiswa(
+                siswa = person,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { onSiswaClick(siswa) }
+                    .padding(dimensionResource(id = R.dimen.padding_small))
+                    //edit 2.2 jadikan itemsiswa menjadi clickable()
+                    .clickable { onSiswaClick(person) }
             )
         }
     }
 }
 
 @Composable
-fun SiswaCard(
+fun ItemSiswa(
     siswa: DataSiswa,
     modifier: Modifier = Modifier
 ) {

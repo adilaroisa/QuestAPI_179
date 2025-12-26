@@ -1,5 +1,48 @@
 package com.example.pertemuan12localrestapi.view
 
+import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.pertemuan12localrestapi.R
+import com.example.pertemuan12localrestapi.modeldata.DataSiswa
+import com.example.pertemuan12localrestapi.uicontroller.route.DestinasiDetail
+import com.example.pertemuan12localrestapi.viewmodel.DetailViewModel
+import com.example.pertemuan12localrestapi.viewmodel.StatusUIDetail
+import com.example.pertemuan12localrestapi.viewmodel.provider.PenyediaViewModel
+import kotlinx.coroutines.launch
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailSiswaScreen(
@@ -17,12 +60,13 @@ fun DetailSiswaScreen(
             )
         },
         floatingActionButton = {
-            val uiState = viewModel.statusUiDetail
+            val uiState = viewModel.statusUIDetail // Sudah disesuaikan (UIDetail)
             FloatingActionButton(
                 onClick = {
                     when(uiState){
-                        is StatusUiDetail.Success ->
-                            navigateToEditItem(uiState.status.id)
+                        is StatusUIDetail.Success ->
+                            // Di ViewModel kamu pakai 'satusiswa', bukan 'status'
+                            navigateToEditItem(uiState.satusiswa.id)
                         else ->{}
                     }
                 },
@@ -38,11 +82,13 @@ fun DetailSiswaScreen(
         modifier = modifier
     ) { innerPadding ->
         val coroutineScope = rememberCoroutineScope()
+
         BodyDetailDataSiswa(
-            statusUiDetail = viewModel.statusUiDetail,
+            statusUIDetail = viewModel.statusUIDetail, // Sudah disesuaikan
             onDelete = {
                 coroutineScope.launch {
-                    viewModel.hapusStatusSiswa()
+                    // Di ViewModel namanya hapusSatuSiswa, bukan hapusStatusSiswa
+                    viewModel.hapusSatuSiswa()
                     navigateBack()
                 }
             },
@@ -55,7 +101,7 @@ fun DetailSiswaScreen(
 
 @Composable
 private fun BodyDetailDataSiswa(
-    statusUiDetail: StatusUiDetail,
+    statusUIDetail: StatusUIDetail,
     onDelete: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -64,15 +110,22 @@ private fun BodyDetailDataSiswa(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_medium))
     ) {
         var deleteConfirmationRequired by rememberSaveable { mutableStateOf(false) }
-        when(statusUiDetail){
-            is StatusUiDetail.Success -> {
-                Siswa(
-                    siswa = statusUiDetail.status.siswa,
+
+        when(statusUIDetail){
+            is StatusUIDetail.Success -> {
+                DetailDataSiswa(
+                    siswa = statusUIDetail.satusiswa, // Mengambil 'satusiswa' dari data class Success
                     modifier = Modifier.fillMaxWidth()
                 )
             }
-            else -> {}
+            is StatusUIDetail.Loading -> {
+                Text(text = "Memuat data...", modifier = Modifier.padding(16.dp))
+            }
+            is StatusUIDetail.Error -> {
+                Text(text = "Gagal memuat data", modifier = Modifier.padding(16.dp))
+            }
         }
+
         OutlinedButton(
             onClick = { deleteConfirmationRequired = true },
             shape = MaterialTheme.shapes.small,
@@ -80,6 +133,7 @@ private fun BodyDetailDataSiswa(
         ) {
             Text(stringResource(R.string.delete))
         }
+
         if (deleteConfirmationRequired) {
             DeleteConfirmationDialog(
                 onDeleteConfirm = {
@@ -113,32 +167,17 @@ fun DetailDataSiswa(
             BarisDetailData(
                 labelResID = R.string.nama,
                 itemDetail = siswa.nama,
-                modifier = Modifier.padding(
-                    horizontal = dimensionResource(
-                        id = R.dimen
-                            .padding_medium
-                    )
-                )
+                modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.padding_medium))
             )
             BarisDetailData(
                 labelResID = R.string.alamat,
                 itemDetail = siswa.alamat,
-                modifier = Modifier.padding(
-                    horizontal = dimensionResource(
-                        id = R.dimen
-                            .padding_medium
-                    )
-                )
+                modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.padding_medium))
             )
             BarisDetailData(
                 labelResID = R.string.telpon,
                 itemDetail = siswa.telpon,
-                modifier = Modifier.padding(
-                    horizontal = dimensionResource(
-                        id = R.dimen
-                            .padding_medium
-                    )
-                )
+                modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.padding_medium))
             )
         }
     }

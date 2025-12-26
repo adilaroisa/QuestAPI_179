@@ -26,8 +26,12 @@ class EditViewModel(
 
     init {
         viewModelScope.launch {
-            uiStateSiswa = repositoryDataSiswa.getSatuSiswa(idSiswa)
-                .toUiStateSiswa(true)
+            try {
+                val dataSiswa = repositoryDataSiswa.getSatuSiswa(idSiswa)
+                uiStateSiswa = dataSiswa.toUiStateSiswa(true)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                println("Error saat ambil data siswa: ${e.message}") }
         }
     }
     fun updateUiState(detailSiswa: DetailSiswa) {

@@ -74,6 +74,11 @@ fun HomeStatus(
     retryAction: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+    )
+    {
     when (statusUiSiswa) {
         is StatusUiSiswa.Loading -> OnLoading(modifier = modifier.fillMaxSize())
         is StatusUiSiswa.Success ->
@@ -88,6 +93,7 @@ fun HomeStatus(
                 )
             }
         is StatusUiSiswa.Error -> OnError(retryAction, modifier = modifier.fillMaxSize())
+        }
     }
 }
 

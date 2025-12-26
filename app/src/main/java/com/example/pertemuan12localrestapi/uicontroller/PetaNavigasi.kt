@@ -3,13 +3,19 @@ package com.example.pertemuan12localrestapi.uicontroller
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.example.pertemuan12localrestapi.uicontroller.route.DestinasiDetail
+import com.example.pertemuan12localrestapi.uicontroller.route.DestinasiEdit
 import com.example.pertemuan12localrestapi.uicontroller.route.DestinasiEntry
 import com.example.pertemuan12localrestapi.uicontroller.route.DestinasiHome
+import com.example.pertemuan12localrestapi.view.DetailSiswaScreen
 import com.example.pertemuan12localrestapi.view.EntrySiswaScreen
 import com.example.pertemuan12localrestapi.view.HomeScreen
+import com.example.pertemuan12localrestapi.view.EditSiswaScreen
 
 @Composable
 fun DataSiswaApp(navController: NavHostController = rememberNavController(),
@@ -27,8 +33,9 @@ fun HostNavigasi(
         modifier = modifier
     ) {
         composable(DestinasiHome.route) {
-            HomeScreen(navigateToItemEntry = { navController.navigate(DestinasiEntry.route) },)
-            navigateToEditItem = { navController.navigate("${DestinasiEdit.route}/$it") }
+            HomeScreen(navigateToItemEntry = { navController.navigate(DestinasiEntry.route) },
+                navigateToItemUpdate = { id ->
+                    navController.navigate("${DestinasiEdit.route}/$id") })
         }
         composable(DestinasiEntry.route) {
             EntrySiswaScreen(navigateBack = {

@@ -19,5 +19,10 @@ object PenyediaViewModel {
             .repositoryDataSiswa) }
         initializer { EntryViewModel(aplikasiDataSiswa().container
             .repositoryDataSiswa) }
+        initializer {
+            DetailViewModel(
+                this.createSavedStateHandle(),
+                aplikasiDataSiswa().container.repositoryDataSiswa)
+        }
     }
 }

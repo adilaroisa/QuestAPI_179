@@ -69,6 +69,7 @@ fun HomeScreen(
 @Composable
 fun HomeStatus(
     statusUiSiswa: StatusUiSiswa,
+    onSiswaClick: (Int) -> Unit,
     retryAction: () -> Unit,
     modifier: Modifier = Modifier
 ) {

@@ -65,7 +65,6 @@ fun DetailSiswaScreen(
                 onClick = {
                     when(uiState){
                         is StatusUIDetail.Success ->
-                            // Di ViewModel kamu pakai 'satusiswa', bukan 'status'
                             navigateToEditItem(uiState.satusiswa.id)
                         else ->{}
                     }

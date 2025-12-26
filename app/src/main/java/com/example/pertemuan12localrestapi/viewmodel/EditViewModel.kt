@@ -1,5 +1,20 @@
 package com.example.pertemuan12localrestapi.viewmodel
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import com.example.pertemuan12localrestapi.modeldata.DetailSiswa
+import com.example.pertemuan12localrestapi.modeldata.UIStateSiswa
+import com.example.pertemuan12localrestapi.modeldata.toDataSiswa
+import com.example.pertemuan12localrestapi.modeldata.toUiStateSiswa
+import com.example.pertemuan12localrestapi.repositori.RepositoryDataSiswa
+import com.example.pertemuan12localrestapi.uicontroller.route.DestinasiDetail
+import retrofit2.Response
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
+
 class EditViewModel(
     savedStateHandle: SavedStateHandle,
     private val repositoryDataSiswa: RepositoryDataSiswa

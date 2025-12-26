@@ -58,6 +58,7 @@ fun HomeScreen(
     ) { innerPadding ->
         HomeStatus(
             statusUiSiswa = viewModel.listSiswa,
+            onSiswaClick = navigateToItemUpdate,
             retryAction = { viewModel.loadSiswa() },
             modifier = modifier
                 .padding(innerPadding)

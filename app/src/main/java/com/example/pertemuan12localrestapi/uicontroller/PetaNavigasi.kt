@@ -18,8 +18,7 @@ import com.example.pertemuan12localrestapi.view.HomeScreen
 import com.example.pertemuan12localrestapi.view.EditSiswaScreen
 
 @Composable
-fun DataSiswaApp(navController: NavHostController = rememberNavController(),
-                 modifier: Modifier){
+fun DataSiswaApp(navController: NavHostController = rememberNavController(), modifier: Modifier){
     HostNavigasi(navController = navController)
 }
 
@@ -35,13 +34,12 @@ fun HostNavigasi(
         composable(DestinasiHome.route) {
             HomeScreen(navigateToItemEntry = { navController.navigate(DestinasiEntry.route) },
                 navigateToItemUpdate = { id ->
-                    navController.navigate("${DestinasiEdit.route}/$id") })
+                    navController.navigate("${DestinasiDetail.route}/$id") })
+
         }
         composable(DestinasiEntry.route) {
             EntrySiswaScreen(navigateBack = {
-                navController.navigate(
-                    DestinasiHome
-                        .route) })
+                navController.navigate(DestinasiHome.route) })
         }
         composable(
             DestinasiDetail.routeWithArgs,

@@ -21,9 +21,11 @@ fun DataSiswaApp(navController: NavHostController = rememberNavController(),
 fun HostNavigasi(
     navController: NavHostController,
     modifier: Modifier = Modifier
-){
-    NavHost(navController = navController, startDestination = DestinasiHome.route,
-        modifier = modifier ){
+) {
+    NavHost(
+        navController = navController, startDestination = DestinasiHome.route,
+        modifier = modifier
+    ) {
         composable(DestinasiHome.route) {
             HomeScreen(navigateToItemEntry = { navController.navigate(DestinasiEntry.route) },)
         }
@@ -46,5 +48,16 @@ fun HostNavigasi(
                 navigateBack = { navController.navigate(DestinasiHome.route) }
             )
         }
+        composable(
+            DestinasiEdit.routeWithArgs,
+            arguments = listOf(navArgument(DestinasiEdit.itemIdArg) {
+                type = NavType.IntType
+            })
+        ) {
+            EditSiswaScreen(
+                navigateBack = { navController.navigate(DestinasiHome.route) },
+                onNavigateUp = { navController.navigateUp() }
+            )
         }
     }
+}

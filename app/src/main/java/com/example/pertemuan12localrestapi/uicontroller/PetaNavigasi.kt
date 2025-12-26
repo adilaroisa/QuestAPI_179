@@ -28,14 +28,13 @@ fun HostNavigasi(
     ) {
         composable(DestinasiHome.route) {
             HomeScreen(navigateToItemEntry = { navController.navigate(DestinasiEntry.route) },)
+            navigateToEditItem = { navController.navigate("${DestinasiEdit.route}/$it") }
         }
         composable(DestinasiEntry.route) {
             EntrySiswaScreen(navigateBack = {
                 navController.navigate(
                     DestinasiHome
-                        .route
-                )
-            })
+                        .route) })
         }
         composable(
             DestinasiDetail.routeWithArgs,
